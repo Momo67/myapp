@@ -114,7 +114,11 @@ export default {
         if (this.multiple) {
           let elemToDelete = val.find(elem => elem.value === -1)
           if ((val.length > 1) && (elemToDelete !== undefined)) {
-            val.splice(val.indexOf(elemToDelete), 1)
+            if (val.indexOf(elemToDelete) === 0) {
+              val.splice(val.indexOf(elemToDelete), 1)
+            } else {
+              val.splice(0, val.length - 1)
+            }
           } else if (val.length === 0) {
             val.push(this.dataOptions.find(elem => elem.value === -1))
           }
@@ -133,7 +137,6 @@ export default {
           this.selectedId = val
           this.$refs.select.mutableValue = val
         } else {
-          console.log('Modification de selectedId')
           this.selectedId = val
           this.$refs.select.mutableValue = this.dataOptions.find(obj => obj.value === val)
         }
