@@ -94,7 +94,10 @@ export default {
           } else if (val.length === 0) {
             val.push(this.dataOptions.find(elem => elem.value === -1))
           }
-          this.$emit('input', val)
+          let __array = []
+          __array.push({value: val.value})
+          // this.$emit('input', val)
+          // this.$emit('input', [{value: -1}])
         } else {
           this.selectedValue = this.dataOptions.find(obj => obj.value === this.selectedId)
           this.$emit('input', Number(val))
