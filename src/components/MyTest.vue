@@ -71,34 +71,6 @@ export default {
     }
   },
   computed: {
-    selectedValueBak () {
-      /*
-      console.log('Computed selectedValue selectedId: ', this.selectedId)
-      console.log('Computed selectedValue typeof this.selectedId: ', typeof (this.selectedId))
-      console.log('Computed selectedValue isArray(this.selectedId): ', Array.isArray(this.selectedId))
-      if (this.multiple) {
-        let __array = []
-        if ((this.selectedId !== undefined) && (this.selectedId !== null)) {
-          this.selectedId.forEach((elem) => {
-            console.log('elem: ', elem)
-            __array.push(this.dataOptions.find(obj => obj.value === elem.value))
-          })
-        }
-        console.log('Computed selectedValue __array: ', __array)
-        return __array
-        // return [{value: -1, label: '-Tous-'}]
-      } else {
-        return this.dataOptions.find(obj => obj.value === this.selectedId)
-      }
-      */
-      /*
-      if (!this.multiple) {
-        console.log('Appel de computed selectedValue')
-        return this.dataOptions.find(obj => obj.value === this.selectedId)
-      }
-      */
-      // return this.dataOptions.find(obj => obj.value === this.selectedId)
-    }
   },
   data () {
     return {
@@ -151,14 +123,6 @@ export default {
     }
   },
   methods: {
-    /*
-    onInput ([value]) {
-      console.log('onInput value: ', value)
-      if (!this.multiple) {
-        this.selectedId = value
-      }
-    },
-    */
     onInput (val) {
       if (this.multiple) {
         this.onInputArray(val)
