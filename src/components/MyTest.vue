@@ -97,7 +97,6 @@ export default {
           let __array = []
           __array.push({value: val.value})
           // this.$emit('input', val)
-          // this.$emit('input', [{value: -1}])
         } else {
           this.selectedValue = this.dataOptions.find(obj => obj.value === this.selectedId)
           this.$emit('input', Number(val))
