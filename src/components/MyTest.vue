@@ -83,23 +83,22 @@ export default {
     selectedId: {
       handler (val) {
         console.log('Watch selectedId: ', val)
+        let __val = val
         if (this.multiple) {
-          let elemToDelete = val.find(elem => elem.value === -1)
-          if ((val.length > 1) && (elemToDelete !== undefined)) {
-            if (val.indexOf(elemToDelete) === 0) {
-              val.splice(val.indexOf(elemToDelete), 1)
+          let elemToDelete = __val.find(elem => elem.value === -1)
+          if ((__val.length > 1) && (elemToDelete !== undefined)) {
+            if (__val.indexOf(elemToDelete) === 0) {
+              __val.splice(__val.indexOf(elemToDelete), 1)
             } else {
-              val.splice(0, val.length - 1)
+              __val.splice(0, __val.length - 1)
             }
-          } else if (val.length === 0) {
-            val.push(this.dataOptions.find(elem => elem.value === -1))
+          } else if (__val.length === 0) {
+            __val.push(this.dataOptions.find(elem => elem.value === -1))
           }
-          let __array = []
-          __array.push({value: val.value})
-          // this.$emit('input', val)
+          this.$emit('input', __val)
         } else {
           this.selectedValue = this.dataOptions.find(obj => obj.value === this.selectedId)
-          this.$emit('input', Number(val))
+          this.$emit('input', Number(__val))
         }
       },
       deep: true

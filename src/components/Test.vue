@@ -78,17 +78,27 @@
   </datatable>
 -->
     <my-test
-    v-model="arbre.statut"
-    :options="options_statut"
-    trackBy="value"
-    fieldName="label"
-    sort="asc"
-    placeholder="Sélectionner un statut"
-    :multiple="multiple"
+      v-model="statutArray"
+      :options="options_statut"
+      trackBy="value"
+      fieldName="label"
+      sort="asc"
+      placeholder="Sélectionner un statut"
+      :multiple="multiple"
     ></my-test>
-    <code>{{arbre}}</code>
-    <br />
-    <span>{{statutArray}}</span><br/>
+    <!--
+    <my-test
+      v-model="arbre.statut"
+      :options="options_statut"
+      trackBy="value"
+      fieldName="label"
+      sort="asc"
+      placeholder="Sélectionner un statut"
+      :multiple="multiple"
+    ></my-test>
+  -->
+    <code>{{arbre}}</code><br />
+    <code>{{statutArray}}</code><br />
     <vue-select
       :options="options_pays"
       :multiple="true"
@@ -135,6 +145,8 @@
     data () {
       return {
         statut: '',
+        statutArray: [],
+        selectedId: 2,
         arbre: {},
         title: '<h1>Hello World!</h1>',
         user: {
@@ -190,9 +202,8 @@
           {value: 1, label: 'Existant', SortOrder: 10, IsActive: 1},
           {value: 2, label: 'Supprimé', SortOrder: 20, IsActive: 1}
         ],
-        multiple: true,
-        selectedValue: [{value: -1, label: '-Tous-'}],
-        statutArray: -1
+        multiple: false,
+        selectedValue: [{value: -1, label: '-Tous-'}]
       }
     },
     computed: {
@@ -219,18 +230,19 @@
           this.rows = this.rows.slice(this.query.offset, this.query.offset + this.query.limit)
         },
         deep: true
-      } /*,
-      'arbre.statut': {
+      },
+      statutArray: {
         handler: function (val) {
-          this.statutArray = []
-          if (Array.isArray(this.arbre.statut)) {
-            this.arbre.statut.forEach(statut => {
-              this.statutArray.push(statut.value)
+          if (Array.isArray(val)) {
+            let __array = []
+            val.forEach(elem => {
+              __array.push(elem.value)
             })
+            this.arbre.statut = __array
           }
         },
         deep: true
-      } */
+      }
     },
     methods: {
       spanOnClick: function () {
@@ -242,14 +254,15 @@
       },
       onInput (value) {
         /*
-        console.log('onInput:  ', val)
         let value = []
         val.forEach(elem => {
           value.push(elem.value)
         })
         console.log('value:  ', value)
         */
+        console.log('onInput:  ', value)
         this.selectedId = value
+        // this.statutArray = value
       },
       setValue () {
         if (this.multiple) {
@@ -270,7 +283,6 @@
     },
     created: function () {
       // this.arbre = {...ARBRE}
-      this.multiple = true
       /*
       // var payload = '<Requete><Name>*</Name><IdObjet>101357</IdObjet></Requete>'
       var payload = '<Requete><NomObjet>%</NomObjet><Validation><Id>2</Id></Validation></Requete>'
@@ -312,16 +324,14 @@
       // this.multiple = false
       this.arbre = {...ARBRE}
       this.arbre.statut = [{value: -1, label: '- Tous -', order: 1}]
+      // this.statutArray = [{value: -1, label: '- Tous -', order: 1}]
+      // this.statutArray = [{value: 10, label: 'En demande d\'abattage', order: 2}]
 
-/*
       if (this.multiple) {
         this.arbre.statut = [{value: -1, label: '-Tous-'}]
       } else {
         this.arbre.statut = 4
       }
-*/
-
-      this.statut = 2
     }
   }
 </script>
