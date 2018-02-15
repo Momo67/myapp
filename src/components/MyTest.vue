@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="my-test">
+  <div class="my-select">
     <vue-select ref="select"
       :options="dataOptions"
       :value="selectedValue"
@@ -17,7 +17,7 @@ import axios from 'axios'
 import orderBy from 'lodash/orderBy'
 
 export default {
-  name: 'my-test',
+  name: 'my-select',
   components: {
     VueSelect
   },
@@ -39,7 +39,7 @@ export default {
       type: String,
       required: false
     },
-    fieldName: {
+    fieldname: {
       type: String,
       required: false
     },
@@ -52,9 +52,8 @@ export default {
       default: 'label',
       required: false
     },
-    trackBy: {
+    trackby: {
       type: String,
-      default: '',
       required: false
     },
     placeholder: {
@@ -82,7 +81,6 @@ export default {
   watch: {
     selectedId: {
       handler (val) {
-        console.log('Watch selectedId: ', val)
         let __val = val
         if (this.multiple) {
           let elemToDelete = __val.find(elem => elem.value === -1)
@@ -105,7 +103,6 @@ export default {
     },
     value: {
       handler (val) {
-        console.log('Watch value: ', val, ' selectedId: ', this.selectedId)
         if (this.multiple) {
           this.selectedId = val
           this.$refs.select.mutableValue = val
@@ -132,11 +129,9 @@ export default {
       }
     },
     onInputArray (value) {
-      console.log('Appel de onInputArray selectedId: ', this.selectedId, ' value: ', value)
       this.selectedId = value
     },
     onInputValue ({value}) {
-      console.log('Appel de onInputValue selectedId: ', this.selectedId, ' value: ', value)
       this.selectedId = value
     },
     computeOptions (options) {
@@ -144,8 +139,8 @@ export default {
       this.dataOptions.push({value: -1, label: '- Tous -', order: 1})
       options.forEach(item => {
         if ((item.IsActive === undefined) || (item.IsActive !== '0')) {
-          let data = (!this.fieldName) ? item.Data : item[this.fieldName]
-          let value = (!this.trackBy) ? (item.Value !== undefined ? item.Value : item.Id) : item[this.trackBy]
+          let data = (this.fieldname === undefined) ? item.Data : item[this.fieldname]
+          let value = (this.trackby === undefined) ? ((item.Value !== undefined) ? item.Value : item.Id) : item[this.trackby]
           data = data.replace(/&nbsp;/g, ' ')
           let option = {}
           option.value = parseInt(value)
@@ -155,6 +150,7 @@ export default {
         }
       })
       this.dataOptions = orderBy(this.dataOptions, 'order', this.sort)
+      this.$emit('onoptionsloaded')
     },
     fetchData () {
       if (this.options === undefined) {

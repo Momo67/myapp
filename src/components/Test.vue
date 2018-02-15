@@ -77,28 +77,30 @@
     :query="query">
   </datatable>
 -->
-    <my-test
+<!--
+    <my-select
       v-model="statutArray"
       :options="options_statut"
-      trackBy="value"
-      fieldName="label"
+      trackby="value"
+      fieldname="label"
       sort="asc"
       placeholder="Sélectionner un statut"
       :multiple="multiple"
-    ></my-test>
-    <!--
-    <my-test
+      @onoptionsloaded="onOptionsLoaded"
+    ></my-select>
+  -->
+    <my-select
       v-model="arbre.statut"
       :options="options_statut"
-      trackBy="value"
-      fieldName="label"
+      trackby="value"
+      fieldname="label"
       sort="asc"
       placeholder="Sélectionner un statut"
       :multiple="multiple"
-    ></my-test>
-  -->
+    ></my-select>
     <code>{{arbre}}</code><br />
     <code>{{statutArray}}</code><br />
+    <!--
     <vue-select
       :options="options_pays"
       :multiple="true"
@@ -106,6 +108,7 @@
       @input="onInput"
     ></vue-select>
     <span>{{selectedValue}}</span>
+  -->
   </br/>
     <button @click="setValue">Set</button>&nbsp;<button @click="resetValue">Reset</button>
   </div>
@@ -202,8 +205,7 @@
           {value: 1, label: 'Existant', SortOrder: 10, IsActive: 1},
           {value: 2, label: 'Supprimé', SortOrder: 20, IsActive: 1}
         ],
-        multiple: false,
-        selectedValue: [{value: -1, label: '-Tous-'}]
+        multiple: false
       }
     },
     computed: {
@@ -266,7 +268,7 @@
       },
       setValue () {
         if (this.multiple) {
-          this.arbre.statut = [{value: 10, label: 'En demande d\'abattage', SortOrder: 39, IsActive: 1}]
+          this.statutArray = [{value: 10, label: 'En demande d\'abattage', SortOrder: 39, IsActive: 1}]
         } else {
           this.arbre.statut = 10
         }
@@ -274,11 +276,19 @@
       },
       resetValue () {
         if (this.multiple) {
-          this.arbre.statut = [{value: -1, label: '- Tous -', order: 1}]
+          this.statutArray = [{value: -1, label: '- Tous -', order: 1}]
         } else {
           this.arbre.statut = 2
         }
         this.selectedValue = []
+      },
+      onOptionsLoaded () {
+        console.log('### onOptionsLoaded ###')
+        if (this.multiple) {
+          this.statutArray = [{value: 5, label: 'En attente de soins', SortOrder: 30, IsActive: 1}]
+        } else {
+          this.arbre.statut = 2
+        }
       }
     },
     created: function () {
@@ -323,6 +333,7 @@
     mounted () {
       // this.multiple = false
       this.arbre = {...ARBRE}
+      /*
       this.arbre.statut = [{value: -1, label: '- Tous -', order: 1}]
       // this.statutArray = [{value: -1, label: '- Tous -', order: 1}]
       // this.statutArray = [{value: 10, label: 'En demande d\'abattage', order: 2}]
@@ -332,6 +343,7 @@
       } else {
         this.arbre.statut = 4
       }
+      */
     }
   }
 </script>

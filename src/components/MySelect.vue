@@ -39,7 +39,7 @@ export default {
       type: String,
       required: false
     },
-    fieldName: {
+    fieldname: {
       type: String,
       required: false
     },
@@ -52,9 +52,8 @@ export default {
       default: 'label',
       required: false
     },
-    trackBy: {
+    trackby: {
       type: String,
-      default: '',
       required: false
     },
     placeholder: {
@@ -71,26 +70,46 @@ export default {
     }
   },
   computed: {
-    selectedValue () {
-      return this.dataOptions.find(obj => obj.value === this.selectedId)
-    }
   },
   data () {
     return {
-      selectedId: null,
-      dataOptions: []
+      selectedId: undefined,
+      dataOptions: [],
+      selectedValue: undefined
     }
   },
   watch: {
     selectedId: {
       handler (val) {
-        this.$emit('input', Number(val))
+        let __val = val
+        if (this.multiple) {
+          let elemToDelete = __val.find(elem => elem.value === -1)
+          if ((__val.length > 1) && (elemToDelete !== undefined)) {
+            if (__val.indexOf(elemToDelete) === 0) {
+              __val.splice(__val.indexOf(elemToDelete), 1)
+            } else {
+              __val.splice(0, __val.length - 1)
+            }
+          } else if (__val.length === 0) {
+            __val.push(this.dataOptions.find(elem => elem.value === -1))
+          }
+          this.$emit('input', __val)
+        } else {
+          this.selectedValue = this.dataOptions.find(obj => obj.value === this.selectedId)
+          this.$emit('input', Number(__val))
+        }
       },
       deep: true
     },
     value: {
       handler (val) {
-        this.selectedId = this.value
+        if (this.multiple) {
+          this.selectedId = val
+          this.$refs.select.mutableValue = val
+        } else {
+          this.selectedId = val
+          this.$refs.select.mutableValue = this.dataOptions.find(obj => obj.value === val)
+        }
       },
       deep: true
     },
@@ -102,7 +121,17 @@ export default {
     }
   },
   methods: {
-    onInput ({value}) {
+    onInput (val) {
+      if (this.multiple) {
+        this.onInputArray(val)
+      } else {
+        this.onInputValue(val)
+      }
+    },
+    onInputArray (value) {
+      this.selectedId = value
+    },
+    onInputValue ({value}) {
       this.selectedId = value
     },
     computeOptions (options) {
@@ -110,8 +139,8 @@ export default {
       this.dataOptions.push({value: -1, label: '- Tous -', order: 1})
       options.forEach(item => {
         if ((item.IsActive === undefined) || (item.IsActive !== '0')) {
-          let data = (!this.fieldName) ? item.Data : item[this.fieldName]
-          let value = (!this.trackBy) ? (item.Value !== undefined ? item.Value : item.Id) : item[this.trackBy]
+          let data = (this.fieldname === undefined) ? item.Data : item[this.fieldname]
+          let value = (this.trackby === undefined) ? ((item.Value !== undefined) ? item.Value : item.Id) : item[this.trackby]
           data = data.replace(/&nbsp;/g, ' ')
           let option = {}
           option.value = parseInt(value)
@@ -121,6 +150,7 @@ export default {
         }
       })
       this.dataOptions = orderBy(this.dataOptions, 'order', this.sort)
+      this.$emit('onoptionsloaded')
     },
     fetchData () {
       if (this.options === undefined) {
