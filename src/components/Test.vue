@@ -8,16 +8,30 @@
     <p>
       {{creator}}
     </p>
-<!--
-    <my-select
+    <!--
+    <my-select ref="simpleselect"
       v-model="arbre.statut"
       src="http://localhost/goeland/objet/ajax/arbre_get_select.php"
       item="Validation"
+      trackby="Id"
+      fieldname="Data"
       sort="asc"
       placeholder="Sélectionner un statut"
+      @onoptionsloaded="onOptionsLoaded"
     ></my-select>
--->
-  <!--
+    -->
+    <!--
+    <my-select
+      v-model="arbre.statut"
+      :options="options_statut"
+      trackby="value"
+      fieldname="label"
+      sort="asc"
+      placeholder="Sélectionner un statut"
+      :multiple="multiple"
+    ></my-select>
+  -->
+<!--
     <ul>
       <li v-for="arbre in arbres">
         {{arbre.IdObjet}} {{arbre.NomObjet}}
@@ -77,7 +91,6 @@
     :query="query">
   </datatable>
 -->
-<!--
     <my-select
       v-model="statutArray"
       :options="options_statut"
@@ -88,7 +101,7 @@
       :multiple="multiple"
       @onoptionsloaded="onOptionsLoaded"
     ></my-select>
-  -->
+  <!--
     <my-select
       v-model="arbre.statut"
       :options="options_statut"
@@ -96,8 +109,10 @@
       fieldname="label"
       sort="asc"
       placeholder="Sélectionner un statut"
-      :multiple="multiple"
+      :multiple="false"
+      @onoptionsloaded="onOptionsLoaded"
     ></my-select>
+  -->
     <code>{{arbre}}</code><br />
     <code>{{statutArray}}</code><br />
     <!--
@@ -205,7 +220,7 @@
           {value: 1, label: 'Existant', SortOrder: 10, IsActive: 1},
           {value: 2, label: 'Supprimé', SortOrder: 20, IsActive: 1}
         ],
-        multiple: false
+        multiple: true
       }
     },
     computed: {
@@ -287,7 +302,7 @@
         if (this.multiple) {
           this.statutArray = [{value: 5, label: 'En attente de soins', SortOrder: 30, IsActive: 1}]
         } else {
-          this.arbre.statut = 2
+          this.arbre.statut = 5
         }
       }
     },
