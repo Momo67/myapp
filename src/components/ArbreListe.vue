@@ -415,8 +415,10 @@
 <script>
 import Vue from 'vue'
 import { OBJ_URL_AJAX, ARBRE, FIELDS, SORTORDER } from '../config'
-import MySelect from './MySelect'
-import MyListe from './MyListe'
+// import MySelect from './MySelect'
+import MySelect from 'mp-vue-myselect'
+// import MyListe from './MyListe'
+import MyListe from 'mp-vue-myliste'
 import CustomActions from './CustomActions'
 Vue.component('custom-actions', CustomActions)
 import RowDetails from './RowDetails'
